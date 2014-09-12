@@ -17,26 +17,41 @@
 import sys
 import csv
 import urllib2
+import calendar
+from datetime import datetime
 
 url = 'http://www.wunderground.com/history/airport/KNYC/%d/%d/%d/DailyHistory.html?req_city=Manhattan&req_state=NY&req_statename=New+York&format=1'
 
+def diff_month(d2,d1):
+    return(d2.year-d1.year)*12 + d2.month-d1.month
+
 def readurl(year1, month1, day1, year2, month2, day2):
-    #-- Loop through years, months and days
-    for y in range(year1,year2+1):
-        print 'Year: %d'%y
-        for m in range(month1,month2+1):
-            print 'Month: %d'%m
-            for d in range(day1,day2+1):
-                print 'Day: %d'%d
-                path = url %(y,m,d)
-                print 'Fetching: %s'%path
-                data = urllib2.urlopen(path)
-                reader = csv.reader(data)
-                r = [row for row in reader]
-                #-- Append to existing csv file
-                with open("/home/mohit/Documents/weather.csv","a") as f:
-                    writer = csv.writer(f)
-                    writer.writerows(r[2:26])
+    print 'starting'
+    #-- Find number of days in a month
+    a = diff_month(datetime(year2,month2,1), datetime(year1,month1,1))
+    print a
+    n = 1
+    y = year1
+
+    for m in range(month1, month1+a+a/12):
+            if(m % 13*n == 0):
+                y = y + 1
+                n = n + 1
+
+            #-- m%m =0, to remove that
+            if(m%13 != 0):
+                dmod = (calendar.monthrange(y,m%13)[1])                
+                for d in range(1,dmod+1):
+                    #-- Join year/month/dates
+                    path = url %(y,m%13,d%32)
+                    print 'Fetching for: %d %d %d'%(y,m%13,d)
+                    data = urllib2.urlopen(path)
+                    reader = csv.reader(data)
+                    r = [row for row in reader]
+                    #-- Append to existing csv file
+                    with open("/home/mohitsharma44/devel/weather.csv","a") as f:
+                        writer = csv.writer(f)
+                        writer.writerows(r[2:])
 
 
 if __name__ == "__main__":
