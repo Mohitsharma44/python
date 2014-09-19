@@ -44,15 +44,56 @@ def readurl(year1, month1, day1, year2, month2, day2):
                 for d in range(1,dmod+1):
                     #-- Join year/month/dates
                     path = url %(y,m%13,d%32)
-                    print 'Fetching for: %d %d %d'%(y,m%13,d)
+                    print 'WeatherBot: Fetching: %d %d %d'%(y,m%13,d)
                     data = urllib2.urlopen(path)
                     reader = csv.reader(data)
-                    r = [row for row in reader]
+                    r = [row for length,row in enumerate(reader)]
+                    row_count = sum(1 for row in r)
+                    for g in range(2, row_count):
+                        a = (r[g][13].split(' '))
+                        b = int((a[1])[0:2]) - 4
+                        x = a[0]
+                        yr = int(x.split('-')[0]) 
+                        mn = int(x.split('-')[1]) 
+                        dy = int(x.split('-')[2])
+                        dy1 = dy
+                        if (mn in ("1","3","5","7","8","10","12") and dy == 31 and b == 0):
+                            if (mn > "12"):
+                                dy = 1
+                                mn = 1
+                                yr = yr + 1
+                            if (mn < "13"):
+                                dy = dy + 1
+                                mn = mn + 1
+                        if (mn in ("4","6","9","11") and dy == 30 and  b == 0):
+                            if (mn > "12"):
+                                dy = 1
+                                mn = 1
+                                yr = yr + 1
+                            if (mn < "13"):
+                                dy = dy + 1
+                                mn = mn + 1
+                        if (mn == "2" and b == 0):
+                            if (dy == 29 and calendar.isleap(yr) == True):
+                                dy = 1
+                                mn = mn + 1
+                            if (dy == 28 and calendar.isleap(yr) == False):
+                                dy = 1
+                                mn = mn + 1
+                        print row_count
+
+                        r[g][13] = "%s:%s:%s-%02d:%s"%(yr,mn,dy,b,a[1][3:])
+                        print r[g][13]
+                    #print "a = %s"%a
+                    #print "b = %s"%b
+                    #r[2][13]=str(((r[2][13].split(' '))[1]).replace("%d%d"%(a[0],a[1]),"%02d"%c))
+                    #r[2][13] = "%s%02d:%s"%(b,a[3:])
+                    #print r[2][13]
                     #-- Append to existing csv file
                     with open("/home/mohitsharma44/devel/weather.csv","a") as f:
                         writer = csv.writer(f)
                         writer.writerows(r[2:])
-
+                                                                
 
 if __name__ == "__main__":
     #-- Call function with command line arguments
