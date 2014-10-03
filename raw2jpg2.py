@@ -11,5 +11,3 @@ if __name__=='__main__':
         print "Processing Image %s \n\n"%f
         n = dir+f
         scipy.misc.imsave('/home/mohit/Pictures/%s.jpg'%f,dst13.read_raw(n))
-
-        
