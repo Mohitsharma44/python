@@ -34,7 +34,7 @@ Builder.load_string('''
             valign: 'middle'
             halign: 'center'
 
-        Label:                                                                                      
+        Label:
             text: "This is Text1"                                                                  
             text_size: self.width-20, self.height-20                                               
             valign: 'bottom'
@@ -42,9 +42,12 @@ Builder.load_string('''
 
     Scatter:
         Button:
+            on_press: root.btn1pressed()
+            id: btn1
+            bg_color: root.btn_color
             text: "Click Me"
+            text_color:root.text_color
             size_hint: .1,.1
-
 ''')
 
 
@@ -54,7 +57,13 @@ class CustomLayout(GridLayout):
             source = '/usr/share/kivi-examples/widgets/sequenced_images/data/images/button_white.png'))
 
 class RootWidget(FloatLayout):
-    pass
+    text_color = ListProperty([1,1,1,1])
+    btn_color = ListProperty([0.5,0.5,0.5,1])
+    def btn1pressed(self):
+        #print "Button CLicked"
+        self.ids.btn1.text = "You Clicked Me!"
+        #self.ids.btn1.color
+
 
 class btn1(App):
     def build(self):
