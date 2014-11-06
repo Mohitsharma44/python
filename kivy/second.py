@@ -58,7 +58,7 @@ class CustomLayout(GridLayout):
 
 class RootWidget(FloatLayout):
     text_color = ListProperty([1,1,1,1])
-    btn_color = ListProperty([0.5,0.5,0.5,1])
+    btn_color = ListProperty([1,0,0,1])
     def btn1pressed(self):
         #print "Button CLicked"
         self.ids.btn1.text = "You Clicked Me!"

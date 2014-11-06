@@ -1,0 +1,20 @@
+<SelectScreen>:
+
+	BoxLayout:
+		
+		Button:
+			text: 'Screen 1'
+			size_hint_x: .25
+			size_hint_y: None
+		Button:
+			text: 'Screen 2'
+			size_hint_x: .25
+			size_hint_y: None
+		Button:
+			text: 'Screen 3'
+			size_hint_x: .25
+			size_hint_y: None
+		Button:
+			text: 'Screen 4'
+			size_hint_x: .25
+			size_hint_y: None
