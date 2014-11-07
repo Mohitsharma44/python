@@ -4,22 +4,36 @@
 		orientation: 'horizontal'
 		height: '40dp'
 		pos_hint: {'x':0.9, 'y':0.9}
-		
+
 		Button:
-			id: btn1	
+			id: screen1
+			group: 'screen'
 			text: 'Screen 1'
 			size_hint_x: .25
 			size_hint_y: None
-			on_press: root.on_press()
+			state: 'normal'
+			on_state: root.screen1()
 		Button:
+			id: screen2
+			group: 'screen'
 			text: 'Screen 2'
 			size_hint_x: .25
 			size_hint_y: None
+			state: 'normal'
+			on_state: root.screen2()
 		Button:
+			id: screen3
+			group: 'screen'
 			text: 'Screen 3'
 			size_hint_x: .25
 			size_hint_y: None
+			state: 'normal'
+			on_state: root.screen3()
 		Button:
+			id: screen4
+			group: 'screen'
 			text: 'Screen 4'
 			size_hint_x: .25
 			size_hint_y: None
+			state: 'normal'
+			on_state: root.screen4()
