@@ -9,7 +9,7 @@ from kivy.uix.floatlayout import FloatLayout
 class SelectScreen(BoxLayout):
     background_color_normal = ListProperty([1,1,1,1])
     background_color_down = ListProperty([0,1,0,1])
-    
+
     def screen1(self):
         self.ids.screen2.background_color =self.background_color_normal
         self.ids.screen2.text = self.ids.screen2.text[:8]
@@ -19,8 +19,8 @@ class SelectScreen(BoxLayout):
         self.ids.screen4.text = self.ids.screen4.text[:8]
         if(self.ids.screen1.state == "normal"):
             self.ids.screen1.text = self.ids.screen1.text + '\nSelected'
-            self.screen1_options()
-
+            so = screenoptions()
+            so.screen1_options()
         else:
             self.ids.screen1.text = self.ids.screen1.text[:8]
             self.ids.screen1.background_color = self.background_color_down
@@ -70,19 +70,14 @@ class SelectScreen(BoxLayout):
             self.ids.screen4.text = self.ids.screen4.text[:8]
             self.ids.screen4.background_color = self.background_color_down
 
-
+class screenoptions():
 
     def screen1_options(self):
         print "Screen1 Suboptions"
-        s1b1 = Button(size_hint_y=None,
-                      height=40, text='SubOption1',
-                      background_color = self.background_color_normal)
-        f= BoxLayout()
-        f.add_widget(s1b1)
         
         
 
-    def screen2_options(self):
+    def screen2_options():
         print "Screen2 Suboptions"
 
 class dashboard(App):

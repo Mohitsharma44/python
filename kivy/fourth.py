@@ -1,0 +1,73 @@
+from kivy.app import App
+from kivy.uix.tabbedpanel import TabbedPanel
+from kivy.uix.tabbedpanel import TabbedPanelHeader
+from kivy.uix.tabbedpanel import TabbedPanelStrip
+from kivy.uix.tabbedpanel import TabbedPanelItem
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
+from kivy.core.window import Window
+from kivy.lang import Builder
+from kivy.uix.gridlayout import GridLayout
+
+Builder.load_string("""
+<test>:
+    cols:2
+    padding: 200
+    Label: 
+        text: "username"
+    TextInput:
+    Label: 
+        text: "password"
+    TextInput:
+""")
+
+
+class TabbedPanelApp(App):
+      
+      screen_layout = BoxLayout(padding=10, orientation="horizontal")
+
+      def on_start(self):
+            print "Size of Window is: "
+            print Window.size
+
+      def test(GridLayout):
+            pass
+      
+      def build(self):
+          tb_panel= TabbedPanel(tab_width=Window.size[0]/4)
+          screen_layout = BoxLayout(padding=10, orientation="horizontal", size_hint=(.7, 1))
+          tb_panel.default_tab_text = 'Login'
+          
+          #Create text tab
+          th_text_head = TabbedPanelHeader(id='one',text='Screen1')
+          th_text_head.content = test1().test()
+          #tb_panel.Screen1_tab_content = self.test()
+          
+          #Create image tab
+          th_img_head= TabbedPanelHeader(text='Screen2')
+          th_img_head.content= Image(source='sample.jpg',pos=(400, 100), size=(400, 400))
+ 
+          #Create button tab
+          th_btn_head = TabbedPanelHeader(text='Screen3')
+          th_btn_head.content= Button(text='This is my button',font_size=20, size_hint_x=0.5, 
+                                      size_hint_y=0.5)
+ 
+          th_text2_head = TabbedPanelHeader(text='Screen4')
+          th_text2_head.content= Label(text='This is my text content')
+
+          
+          tb_panel.add_widget(th_text_head)
+          tb_panel.add_widget(th_img_head)
+          tb_panel.add_widget(th_btn_head) 
+          tb_panel.add_widget(th_text2_head)
+            
+          return tb_panel
+      
+class test1():
+      def test(self):
+            print 'Test Printing'
+ 
+if __name__ == '__main__':
+    TabbedPanelApp().run()

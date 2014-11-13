@@ -1,0 +1,22 @@
+<screenoptions>:
+	BoxLayout:
+                orientation: 'horizontal'
+                height: '40dp'
+                pos_hint: {'x':0.9, 'y':0.9}
+
+                Button:
+                        id: screen1
+                        group: 'screen'
+                        text: 'Screen 1'
+                        size_hint_x: .25
+                        size_hint_y: None
+                        state: 'normal'
+                        on_state: root.screen1()
+                Button:
+                        id: screen2
+                        group: 'screen'
+                        text: 'Screen 2'
+                        size_hint_x: .25
+                        size_hint_y: None
+                        state: 'normal'
+                        on_state: root.screen2()
