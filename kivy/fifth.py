@@ -9,13 +9,13 @@ class AccordionApp(App):
         for x in range(4):
             item = AccordionItem(title='Screen %d' % x)
             item.add_widget(Button(text='Vis TimeLapse\n', size_hint=(0.25,0.25), 
-                                   pos=(root.width - 100, root.height / 2)))
+                                   pos=(100, 100)))
             item.add_widget(Button(text='IR TimeLapse\n', size_hint=(0.25,0.25),
-                                   pos=(root.width - 100, root.height / 2)))
+                                   pos=(100, 100)))
             item.add_widget(Button(text='Vis Live\n', size_hint=(0.25,0.25),
-                                   pos=(root.width - 100, root.height / 2)))
+                                   pos=(100, 100)))
             item.add_widget(Button(text='IR Live\n', size_hint=(0.25,0.25),
-                                   pos=(root.width - 100, root.height / 2)))
+                                   pos=(100, 100)))
 
 
 
