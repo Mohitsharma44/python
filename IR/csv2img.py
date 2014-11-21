@@ -8,11 +8,21 @@ import time
 
 def csv2np():
     pl.ion()
-    pl.show()
+    #pl.show()
     nparray = np.zeros((240,320,frames))
     z = np.zeros((240,320))
+    test = np.zeros((240,320,frames))
+    test = csvfile.reshape((240,320,frames))
     i=j=count = 0
     k = -1
+    fig,ax = pl.subplots(num = 0, figsize = (10,5), dpi = 150)
+    fig.subplots_adjust(0,0,1,1)
+    im = ax.imshow(z, cmap=pl.cm.rainbow,                                                                                                                                                                        
+                   vmin = min_temp, vmax=max_temp,
+                   aspect='auto')
+    fig.colorbar(im, orientation='vertical')
+    ax.axis = ('off')
+    #fig.canvas.draw()
     for j in range (0,cols):
         count = count + 1  #Go upto 240 columns, 
         if (j%240 == 0):
@@ -20,15 +30,35 @@ def csv2np():
             k = k + 1      #Increment dimension
             print "Columns Done: %s"%j
             print "Frames Done:  %s"%k
-            pl.imshow(z, cmap=pl.cm.rainbow, 
-                       vmin = min_temp, vmax=max_temp)
-            pl.colorbar()
-            pl.draw()
-            time.sleep(0.005)
-            pl.clf()
-        for i in range (0,320):
-            nparray[count][i][k] = csvfile[j][i]
-            z[count][i] = nparray[count][i][k]
+            
+            #print test[count][j][k]==nparray[count][j][k]
+            
+            #pl.imshow(z, cmap=pl.cm.rainbow, 
+            #           vmin = min_temp, vmax=max_temp,
+            #          aspect='auto')
+            #pl.colorbar()
+            #pl.draw()
+            #time.sleep(0.005)
+            #pl.clf()
+            im.set_data(z)
+            fig.canvas.draw()
+            #fig.show()
+        #for i in range (0,320):
+        nparray[count,:,k] = csvfile[j,:]
+        z[count,:] = nparray[count,:,k]
+    
+    
+    '''
+    for k in range (0,frames):
+        z=nparray[:,:,k]
+        print z.shape
+        pl.imshow(z, cmap=pl.cm.rainbow,
+                  vmin = min_temp, vmax = max_temp)
+        pl.colorbar()
+        pl.draw()
+        time.sleep(0.005)
+        pl.clf()
+    '''
     return nparray
 
 
@@ -40,7 +70,9 @@ def np2img():
     pl.ion()
     pl.show()
     for k in range (0,frames):
-        pl.imshow(z, cmap=pl.cm.Accent, vmin=z.min(), vmax=z.max())
+        pl.imshow(z, cmap=pl.cm.Accent, 
+                  vmin=z.min(), vmax=z.max(),
+                  aspect='auto')
         pl.colorbar()
         pl.draw()
         time.sleep(0.05)
@@ -75,7 +107,7 @@ def animate(path):
 
 if __name__ == '__main__':
     print "Starting"
-    csvfile = genfromtxt('/home/mohit/devel/python/mohit/python/IR/data.csv',delimiter=',')
+    csvfile = genfromtxt('/home/mohitsharma44/devel/python/IR/data.csv',delimiter=',')
     max_temp = csvfile.max()
     min_temp = csvfile.min()
     cols = csvfile.shape[0]
