@@ -6,23 +6,43 @@ import matplotlib.animation as animation
 import pylab as pl
 import time
 
+#------------------------
+# Software to process IR Files (.csv)
+#
+# 2014/11/23 - Written by Mohit Sharma (CUSP/ NYU)
+#------------------------
+
 def csv2np():
-    pl.ion()
-    #pl.show()
+    pl.ion() #for interactive
+    pl.show()
     nparray = np.zeros((240,320,frames))
     z = np.zeros((240,320))
-    test = np.zeros((240,320,frames))
-    test = csvfile.reshape((240,320,frames))
     i=j=count = 0
     k = -1
-    fig,ax = pl.subplots(num = 0, figsize = (10,5), dpi = 150)
-    fig.subplots_adjust(0,0,1,1)
-    im = ax.imshow(z, cmap=pl.cm.rainbow,                                                                                                                                                                        
-                   vmin = min_temp, vmax=max_temp,
+    fig,(ax1,ax2) = pl.subplots(1,2, figsize = (50,25), dpi = 90)
+    fig.suptitle('IR Playback', fontsize=20)
+    
+    #-- Show Video
+    ax2.set_title('Video')
+    im = ax2.imshow(z, cmap=pl.cm.gray,
+                   vmin = 5, vmax=max_temp,
                    aspect='auto')
     fig.colorbar(im, orientation='vertical')
-    ax.axis = ('off')
-    #fig.canvas.draw()
+    ax2.axis = ('off')
+
+    #-- Show Histogram
+    ax1.set_title('Histogram')
+    a,edges = np.histogram(z,bins=1000)
+    b = 0.5*(edges[1:]+edges[:-1])
+    li, = ax1.plot(b,a,'r-')
+    ax1.set_ylim(0,1000)
+    ax1.set_xlim(5,40)
+    
+    #-- Adjust Layout
+    pl.subplots_adjust(top=0.75)
+    pl.tight_layout()
+
+    #-- Create Data Cube for further processing
     for j in range (0,cols):
         count = count + 1  #Go upto 240 columns, 
         if (j%240 == 0):
@@ -31,83 +51,39 @@ def csv2np():
             print "Columns Done: %s"%j
             print "Frames Done:  %s"%k
             
-            #print test[count][j][k]==nparray[count][j][k]
-            
-            #pl.imshow(z, cmap=pl.cm.rainbow, 
-            #           vmin = min_temp, vmax=max_temp,
-            #          aspect='auto')
-            #pl.colorbar()
-            #pl.draw()
-            #time.sleep(0.005)
-            #pl.clf()
+            a,edges = np.histogram(z,bins=1000)
+            b = 0.5*(edges[1:]+edges[:-1])
+            li.set_xdata(b) # ! to set X value, pass it
+            li.set_ydata(a) # as Y value and vice-versa
             im.set_data(z)
+            im.set_clim(vmin = 0) #change min temperature value
             fig.canvas.draw()
-            #fig.show()
-        #for i in range (0,320):
+
         nparray[count,:,k] = csvfile[j,:]
         z[count,:] = nparray[count,:,k]
-    
-    
-    '''
-    for k in range (0,frames):
-        z=nparray[:,:,k]
-        print z.shape
-        pl.imshow(z, cmap=pl.cm.rainbow,
-                  vmin = min_temp, vmax = max_temp)
-        pl.colorbar()
-        pl.draw()
-        time.sleep(0.005)
-        pl.clf()
-    '''
     return nparray
 
+def iter_loadtxt(filename, delimiter=',', skiprows=0, dtype=float):
+    def iter_func():
+        with open(filename, 'r') as infile:
+            for i in range(skiprows):
+                next(infile)
+            for line in infile:
+                line = line.rstrip().split(delimiter)
+                for item in line:
+                    yield dtype(item)
+        iter_loadtxt.rowlength = len(line)
 
-def np2img():
-    i=j=0
-    nparray = csv2np()
-    print "Processing Frame 0"
-    z = np.zeros((240,320))
-    pl.ion()
-    pl.show()
-    for k in range (0,frames):
-        pl.imshow(z, cmap=pl.cm.Accent, 
-                  vmin=z.min(), vmax=z.max(),
-                  aspect='auto')
-        pl.colorbar()
-        pl.draw()
-        time.sleep(0.05)
-        pl.clf()
-        for i in range (0,240):
-            for j in range(0,320):
-                z[j][i]=nparray[j][i][k]
-                
-            
-    return z
+    data = np.fromiter(iter_func(), dtype=dtype)
+    data = data.reshape((-1, iter_loadtxt.rowlength))
+    return data
 
-def img2plt():
-    z = np.zeros((240,320))
-    z = np2img()
-    plt.imshow(z, cmap=plt.cm.gray, vmin=z.min(), vmax=z.max())
-    colorbar()
-    #savefig('foo1.png')
-    plt.show()
-
-
-'''
-def animate(path):
-    nparray = np.zeros((240,320,75))
-    nparray = csv2np(path)
-    fig = plt.figure()
-    im_list = []
-    for i in range (0,75):
-        im_list.append(nparray[:][:][i])
-    animation.ArtistAnimation(fig, im_list, interval=50)
-    plt.show()
-'''
 
 if __name__ == '__main__':
-    print "Starting"
-    csvfile = genfromtxt('/home/mohitsharma44/devel/python/IR/data.csv',delimiter=',')
+    
+    print "Reading CSV file.."
+    #csvfile = genfromtxt('data.csv',delimiter=',')
+    csvfile = iter_loadtxt('data.csv')
     max_temp = csvfile.max()
     min_temp = csvfile.min()
     cols = csvfile.shape[0]
