@@ -20,15 +20,15 @@ def csv2np():
     z = np.zeros((240,320))
     i=j=count = 0
     k = -1
-    fig,(ax1,ax2) = pl.subplots(1,2, figsize = (50,25), dpi = 90)
+    fig,(ax1,ax2) = pl.subplots(1,2, figsize = (30,15), dpi = 75)
     fig.suptitle('IR Playback', fontsize=20)
     gs = gridspec.GridSpec(1,2, width_ratios=[3,2])
 
     #-- Show Video
     ax2 = pl.subplot(gs[0])
     ax2.set_title('Video')
-    im = ax2.imshow(z, cmap=pl.cm.gray,
-                   vmin = 5, vmax=max_temp,
+    im = ax2.imshow(z, cmap=pl.cm.CMRmap,
+                   vmin = -5, vmax=20,
                    aspect='auto')
     fig.colorbar(im, orientation='vertical')
     ax2.axes.get_xaxis().set_visible(False)
@@ -64,7 +64,8 @@ def csv2np():
             li.set_ydata(a) # as Y value and vice-versa
 
             im.set_data(z)
-            im.set_clim(vmin = 0) #change min temperature value
+            im.set_clim(vmin = 8) #change min temperature value
+            im.set_clim(vmax = 25)
             fig.canvas.draw()
 
         nparray[count,:,k] = csvfile[j,:]
@@ -90,7 +91,7 @@ def iter_loadtxt(filename, delimiter=',', skiprows=0, dtype=float):
 if __name__ == '__main__':
     
     print "Reading CSV file.."
-    csvfile = iter_loadtxt('data.csv')
+    csvfile = iter_loadtxt('../../12_rawdata.csv')
     max_temp = csvfile.max()
     min_temp = csvfile.min()
     cols = csvfile.shape[0]
