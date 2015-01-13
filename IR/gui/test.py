@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 import random
 
+count = 0
 class Window(QtGui.QDialog):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
@@ -25,21 +26,29 @@ class Window(QtGui.QDialog):
         # Just some button connected to `plot` method
         self.button = QtGui.QPushButton('Plot')
         self.button.clicked.connect(self.plot)
+        
+        self.button1 = QtGui.QPushButton('Plot2')
+        self.button1.clicked.connect(self.plot)
 
         # set the layout
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.toolbar)
         layout.addWidget(self.canvas)
         layout.addWidget(self.button)
+        layout.addWidget(self.button1)
         self.setLayout(layout)
 
     def plot(self):
+        global count 
+        count = count + 1
+        print 'I\'m called %02d'%(count%2)
+        
         ''' plot some random stuff '''
         # random data
         data = [random.random() for i in range(10)]
 
         # create an axis
-        ax = self.figure.add_subplot(111)
+        ax = self.figure.add_subplot(2,2,count%2 if count%2!=0 else 2)
 
         # discards the old graph
         ax.hold(False)

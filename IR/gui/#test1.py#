@@ -21,7 +21,9 @@ __version__ = "1.0.0"
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtCore import QSize
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as Canvas
+from matplotlib.backends.backend_qt4agg import (
+    FigureCanvasQTAgg as Canvas
+    NavigationToolbar2QT as NavigationToolbar )
 from matplotlib.figure import Figure
 
 
@@ -86,6 +88,7 @@ class MatplotlibWidget(Canvas):
         Canvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         Canvas.updateGeometry(self)
 
+
     def sizeHint(self):
         w, h = self.get_width_height()
         return QSize(w, h)
@@ -114,6 +117,8 @@ if __name__ == '__main__':
             self.mplwidget.setFocus()
             self.setCentralWidget(self.mplwidget)
             self.plot(self.mplwidget.axes)
+
+            vBox
             
                 
         def plot(self, axes):
