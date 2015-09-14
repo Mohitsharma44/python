@@ -3,7 +3,7 @@ import scipy
 import sys
 import os
 import cv2
-
+print "Program to convert Raw images to JPG."
 if __name__=='__main__':
     dir='/home/mohit/Desktop/vis/'
     files = sorted([f for f in os.listdir(dir)])
